@@ -1,14 +1,20 @@
 // app/home.tsx
-import { StyleSheet, View, Text, TextInput, Platform } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StyleSheet, Text } from 'react-native';
 import MessageModule from './components/messageModule'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
 
 export default function Home() {
+  const [text, setText] = useState('Lol')
+  const handleText = (input: string)=>{
+    if(input.length>0){
+      setText(input)
+    }
+  }
   return (
       <SafeAreaView style={{flex:1, flexDirection:'column'}}>
-        <Text style={{flex:5}}>Lol</Text>
-        <MessageModule/>
+        <Text style={{flex:8}}>{text}</Text>
+        <MessageModule onSubmit={handleText}/>
       </SafeAreaView>
   );
 }
