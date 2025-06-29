@@ -11,22 +11,25 @@ export default function MessageModule({onSubmit}:MessageModuleProps){
     const [extraSize, setExtraSize] = useState(140);
     const [text, setText] = useState('');
 
-    const lineHeight = 20; // You can adjust this to match your text style
-    const maxLines = 6;
+    const lineHeight = 20; // You can adjust this to match your text style -- I did help myself with some chatgpt code
+    const maxLines = 6; //the scrappy looking lines are all mine though
     const maxHeight = lineHeight * maxLines;
     
     const handleText = (input: string) =>{
         if(extraSize<280){
             setText(input)
         } else {
+            //only allows deleting text after 10 lines of text
             if(input.length < text.length) setText(input)
         }
     }
+    //resets the text input and the size constraints
     const handlePress = ()=>{
         onSubmit(text)
         setText('')
         setExtraSize(140)
     }
+    //adds extra scroll space depending on the size of the message
     const handleContentSizeChange = (
         event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
     ) => {

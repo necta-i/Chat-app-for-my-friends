@@ -1,19 +1,28 @@
 // app/home.tsx
-import { StyleSheet, Text } from 'react-native';
-import MessageModule from './components/messageModule'
+import { StyleSheet, View, FlatList } from 'react-native';
+import MessageModule from './components/MessageModule';
+import Message from './components/Message'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
+type MessageData = { id: string; info:string}
 export default function Home() {
-  const [text, setText] = useState('Lol')
+  const [data, setData] = useState<MessageData[]>([])
   const handleText = (input: string)=>{
     if(input.length>0){
-      setText(input)
+      const newMessage = {
+        id: Date.now().toString(),
+        info: input
+      }
+      setData((prev)=>[...prev, newMessage])
     }
   }
   return (
       <SafeAreaView style={{flex:1, flexDirection:'column'}}>
-        <Text style={{flex:8}}>{text}</Text>
+        <View style={{flex:8}}>
+          <FlatList data={data} 
+          renderItem={({item})=><Message text={item.info}/>}/>
+        </View>
         <MessageModule onSubmit={handleText}/>
       </SafeAreaView>
   );
