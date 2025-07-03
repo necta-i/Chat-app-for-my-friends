@@ -12,7 +12,9 @@ export default function MessageModule({onSubmit}:MessageModuleProps){
     const [text, setText] = useState('');
 
     const lineHeight = 20; // You can adjust this to match your text style -- I did help myself with some chatgpt code
-    const maxLines = 6; //the scrappy looking lines are all mine though
+    //note: the actual character max size is 18.8, I tried taking into account the spacing between the lines at 0.1
+    //this works on my devices, a Motorola Edge 40 Neo
+    const maxLines = 7; //the scrappy looking lines are all mine though
     const maxHeight = lineHeight * maxLines;
     
     const handleText = (input: string) =>{
@@ -34,23 +36,29 @@ export default function MessageModule({onSubmit}:MessageModuleProps){
         event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
     ) => {
         const { height } = event.nativeEvent.contentSize;
-        if(height >= maxHeight){
+        if(height > maxHeight){
             setExtraSize(a=>a+20)
         }
     };
     return(
         <KeyboardAwareScrollView enableOnAndroid={true} enableAutomaticScroll={true}
         extraScrollHeight={extraSize}>
-        <View style={{flex:1, flexDirection:'row'}}>
-            <TextInput style={[{flex:5},{lineHeight}]} 
+        <View style={style.textBubble}>
+            <TextInput style={[{flex:5},
+            {lineHeight},
+            {backgroundColor:"#b1b1b1"},
+            {borderRadius:25},
+            {paddingHorizontal:10}
+            ]} 
             multiline={true} 
             value={text}
             onChangeText={handleText}
             placeholder="Write a message"
+            placeholderTextColor='white'
             onContentSizeChange={handleContentSizeChange}
             ></TextInput>
             <TouchableOpacity
-            style={[style.button, { backgroundColor: pressed ? '#929292' : '#b1b1b1' }]}
+            style={[style.button, { backgroundColor: pressed ? '#929292' : '#3500cf' }]}
             onPressIn={() => setPressed(true)}
             onPressOut={() => setPressed(false)}
             onPress={handlePress}
@@ -71,5 +79,11 @@ const style = StyleSheet.create({
     },
     text:{
         color: 'white'
+    },
+    textBubble:{
+        flex:1,
+        flexDirection: 'row',
+        borderRadius: 20,
+        color: '#b1b1b1'
     }
 })

@@ -1,8 +1,8 @@
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 
-export default function Message({text}:{text:string}){
+export default function Message({text, mine}:{text:string, mine:boolean}){
     return(
-    <SafeAreaView style={styles.bubble}>
+    <SafeAreaView style={mine? styles.bubbleMine:styles.bubbleTheirs}>
         <Text>
             {text}
         </Text>
@@ -10,12 +10,22 @@ export default function Message({text}:{text:string}){
 }
 
 const styles = StyleSheet.create({
-    bubble:{
+    bubbleMine:{
         flex:1,
+        flexDirection:'row',
         margin: 1,
         padding:5,
         borderRadius:10,
         backgroundColor: '#e3e3e3',
         alignSelf:'flex-end'
+        },
+    bubbleTheirs:{
+        flex:1,
+        flexDirection:'row',
+        margin: 1,
+        padding:5,
+        borderRadius:10,
+        backgroundColor: '#845aff',
+        alignSelf:'flex-start'
         }
 })

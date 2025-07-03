@@ -3,10 +3,11 @@ import { StyleSheet, View, FlatList } from 'react-native';
 import MessageModule from './components/MessageModule';
 import Message from './components/Message'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 type MessageData = { id: string; info:string}
 export default function Home() {
+  //holding data in a list for displaying in the FlatList element
   const [data, setData] = useState<MessageData[]>([])
   const handleText = (input: string)=>{
     if(input.length>0){
@@ -17,11 +18,21 @@ export default function Home() {
       setData((prev)=>[...prev, newMessage])
     }
   }
+  //ensuring autoscroll to last element
+  const flRef = useRef<FlatList<MessageData>>(null)
+  useEffect (
+    () => {
+      if(data.length>0)
+      flRef.current?.scrollToEnd({animated:true})
+  }, [data])
   return (
       <SafeAreaView style={{flex:1, flexDirection:'column'}}>
         <View style={{flex:8}}>
-          <FlatList data={data} 
-          renderItem={({item})=><Message text={item.info}/>}/>
+          <FlatList 
+          ref={flRef}
+          data={data} 
+          renderItem={({item})=><Message text={item.info} mine={false}/>}
+          />
         </View>
         <MessageModule onSubmit={handleText}/>
       </SafeAreaView>
